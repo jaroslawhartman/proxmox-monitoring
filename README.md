@@ -1,5 +1,5 @@
 # proxmox-monitoring
-Toolset to gather temperature and power consumption metrics then collect in Prometheus
+A toolset to gather temperature and power consumption metrics then collect in Prometheus
 
 # Architecture
 
