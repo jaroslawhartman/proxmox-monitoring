@@ -1,0 +1,77 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - follow_redirects: true
+    enable_http2: true
+    scheme: http
+    timeout: 10s
+    api_version: v2
+    static_configs:
+    - targets: []
+scrape_configs:
+  ## gather metrics of prometheus itself
+- job_name: prometheus
+  honor_timestamps: true
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+    - targets:
+      - prometheus:9090 # equivalent to "localhost:9090"
+
+  ## gather the metrics of json_exporter application itself
+- job_name: json_exporter
+  honor_timestamps: true
+  scrape_interval: 60s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+    - targets:
+      ## Location of the json exporter's real <hostname>:<port>
+      - json_exporter:7979 # equivalent to "localhost:7979"
+
+- job_name: pushgateway
+  honor_timestamps: true
+  honor_labels: true
+  scrape_interval: 60s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+    - targets:
+      ## Location of the json exporter's real <hostname>:<port>
+      - pushgateway:9091 # equivalent to "localhost:7979"
+
+  ## gather the metrics from third party json sources, via the json exporter
+- job_name: json
+  honor_timestamps: true
+  scrape_interval: 60s
+  scrape_timeout: 10s
+  scheme: http
+  follow_redirects: true
+  enable_http2: true
+  metrics_path: /probe
+  params:
+    module: [default]
+  static_configs:
+    - targets:
+      - http://192.168.3.154/meter/0
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      ## Location of the json exporter's real <hostname>:<port>
+      replacement: json_exporter:7979 # equivalent to "localhost:7979"

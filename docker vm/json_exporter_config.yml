@@ -1,0 +1,33 @@
+modules:
+  default:
+    metrics:
+    - name: power
+      path: "{.power}"
+      epochTimestamp: "{ .timestamp }"
+      help: Shelly Plug power (Server)
+      labels:
+        "plug": "server"
+    - name: total
+      path: "{.total}"
+      epochTimestamp: "{ .timestamp }"
+      help: Shelly Plug power (Server)
+      labels:
+        "plug": "server"
+    - name: counter_0
+      path: "{.counters[0]}"
+      epochTimestamp: "{ .timestamp }"
+      help: Shelly Plug power (Server)
+      labels:
+        "plug": "server"
+    - name: counter_1
+      path: "{.counters[1]}"
+      epochTimestamp: "{ .timestamp }"
+      help: Shelly Plug power (Server)
+      labels:
+        "plug": "server"
+    - name: counter_2
+      path: "{.counters[2]}"
+      epochTimestamp: "{ .timestamp }"
+      help: Shelly Plug power (Server)
+      labels:
+        "plug": "server"
