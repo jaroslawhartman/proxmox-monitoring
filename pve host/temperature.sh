@@ -20,6 +20,8 @@ sensors | \
 
 # Disks
 
+TMP=/tmp/hdd.$$
+
 {
   echo "# TYPE temperature gauge"
   echo "# HELP temperature Compponent Temperature"
@@ -30,7 +32,8 @@ sensors | \
         print("temperature{sensor=\""hdd"\"} " $8);
       }'
   done
-} | curl --data-binary @- http://192.168.2.183:9091/metrics/job/temperature_disk/instance/pve
+} > $TMP
 
+curl --data-binary @$TMP http://192.168.2.183:9091/metrics/job/temperature_disk/instance/pve
 
-
+[[ -f "$TMP" ]] && rm -rf "$TMP"
